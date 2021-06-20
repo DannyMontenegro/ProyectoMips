@@ -20,9 +20,16 @@ main:
 	add $s1, $v0, $zero
 	
 validacion: sgt $t0, $s1, $s0
+            slti $t1, $s1, 1
+            or $t0, $t0, $t1
 	    beq $t0, $zero, loop
 	    la $a0, MensajeError
 	    jal imprimir
+	    la $a0, IngresoDato
+	    jal imprimir
+	    li $v0, 5
+	    syscall
+	    add $s1, $v0, $zero
 	    j validacion
 	
 	
@@ -34,6 +41,7 @@ loop:   beq $s1, $s0, fin
 	li $v0, 5
 	syscall
 	add $s1, $v0, $zero
+	jal validacion
 	j loop
 
 fin:	
