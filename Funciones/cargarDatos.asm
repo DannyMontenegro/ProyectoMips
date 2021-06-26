@@ -1,6 +1,6 @@
 .data
-fout: .asciiz "C:\\Users\\XTRATECH-PC\\Desktop\\PAO 1 2021\\Organización de Computadores\\Proyecto\\ProyectoMips\\MORSE.txt"
-buffer: .space 300
+fout: .asciiz "C:\\Users\\XTRATECH-PC\\Desktop\\PAO 1 2021\\Organización de Computadores\\Proyecto\\ProyectoMips\\DiccionarioMorse.txt"
+buffer: .space 1220
 
 
 
@@ -38,11 +38,15 @@ leerArchivo:
 	li $v0, 14
 	move $a0, $s1
 	la $a1, buffer
-	li $a2, 300
+	li $a2,1220
+	syscall
+	li $v0, 16
 	syscall
 	
 	la $v0, buffer #Se retorna el buffer con los datos al main
-	
 	jr $ra
+	
+
+	
 	
 	

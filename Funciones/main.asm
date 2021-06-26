@@ -2,7 +2,8 @@
 	IngresoDato: .asciiz "Elija una opcion:"
 	MensajeFin : .asciiz "Gracias por utilizar el software \n"
 	MensajeError: .asciiz "Ingrese un valor entre 1 y 4 \n"
-	Bienvenida: .asciiz "Bienvenido al entrenamiento morse\n Que acción deseas realizar: \n 1)Practicar de Español a morse \n 2)Practicar de morse a español \n 3)Mostrar diccionario morse \n 4)Salir del entrenamiento \n"
+	Bienvenida: .asciiz "Bienvenido al entrenamiento morse\n" 
+	Menu: .asciiz "Que acción deseas realizar: \n 1)Practicar de Español a morse \n 2)Practicar de morse a español \n 3)Mostrar diccionario morse \n 4)Salir del entrenamiento \n"
 	
 	
 
@@ -15,6 +16,8 @@ main:
 	jal cargarDatos
 	move $t4, $v0
 	la $a0, Bienvenida
+	jal imprimir
+	la $a0, Menu
 	jal imprimir
 	
 	la $a0, IngresoDato
@@ -41,13 +44,11 @@ loop:   beq $s1, 4, fin
 	
 	beq $s1, 3, imprimirdatos
 	
+	beq $s1, 1, fin
 	
-	la $a0, IngresoDato
-	jal imprimir
-	li $v0, 5
-	syscall
-	add $s1, $v0, $zero
-	jal validacion
+	beq $s1, 2, fin
+	
+	
 	j loop
 
 
@@ -60,6 +61,8 @@ fin:
 
 imprimirdatos:
 	move $a0, $t4
+	jal imprimir
+	la $a0, Menu
 	jal imprimir
 	
 	la $a0, IngresoDato
