@@ -46,6 +46,8 @@ leer:
 	
 	
 	lb $t3, ($a1)  #t3 almacena la letra leida
+	beq $t3, 10, leer
+	beq $t3, 13, leer
 	
 	beq $t3, $t1, leerMorse #comparamos si lo leído es una coma
 	sb $t3, ($t6)# almacena la letra leida en el arreglo de letras
@@ -55,16 +57,19 @@ leer:
 
 leerMorse:
 
-	addi $sp, $sp, -4
+	addi $sp, $sp, -8
 	sw $a0, ($sp)
 	add $t5, $t4, $s1 #dirección de arreglo de tamaño
 	
 	lw $a0, ($t5)
+	sw $a0, 4($sp)
+	beq $a0, 4, sumar1
+terminarReserva:
 	li $v0, 9
 	syscall
 	
 	
-	move $a2, $a0
+	lw $a2, 4($sp)
 	lw $a0, ($sp)
 	move $a1, $v0
 	li $v0, 14
@@ -76,14 +81,17 @@ leerMorse:
 	
 	
 	
-	li $v0, 14
-	la $a1, bufferLectura
-	li $a2, 1
-	syscall  #se lee un caracter mas para eliminar el salto de linea
-	
+	#li $v0, 14
+	#la $a1, bufferLectura
+	#li $a2, 1
+	#syscall  #se lee un caracter mas para eliminar el salto de linea
+	#li $v0, 14
+	#la $a1, bufferLectura
+	#li $a2, 1
+	#syscall  #se lee un caracter mas para eliminar el salto de linea
 	addi $t2, $t2, 1
 	
-	addi $sp, $sp, 4
+	addi $sp, $sp, 8
 	j leer
 	
 	
@@ -109,7 +117,10 @@ fin:
 salir:	
 	li $v0, 10
 	syscall	
-	
+
+sumar1:
+	addi $a0,$a0, 1
+	j terminarReserva
 	
 	
 	
