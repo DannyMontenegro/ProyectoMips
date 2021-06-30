@@ -14,7 +14,13 @@
 
 main:
 	jal cargarDatos
+	move $s0, $v0             
+	move $s1, $v1
+	
+	jal opcion3
 	move $t4, $v0
+	
+	
 	la $a0, Bienvenida
 	jal imprimir
 	la $a0, Menu
@@ -24,10 +30,10 @@ main:
 	jal imprimir
 	li $v0, 5
 	syscall
-	move $s1, $v0
+	move $s2, $v0
 	
-validacion: sgt $t0, $s1, 4
-            slti $t1, $s1, 1
+validacion: sgt $t0, $s2, 4
+            slti $t1, $s2, 1
             or $t0, $t0, $t1
 	    beq $t0, $zero, loop
 	    la $a0, MensajeError
@@ -36,21 +42,32 @@ validacion: sgt $t0, $s1, 4
 	    jal imprimir
 	    li $v0, 5
 	    syscall
-	    add $s1, $v0, $zero
+	    move $s2, $v0
 	    j validacion
 	
 	
-loop:   beq $s1, 4, fin
+loop:   beq $s2, 1, opcion1m
 	
-	beq $s1, 3, imprimirdatos
+	beq $s2, 2, fin
 	
-	beq $s1, 1, fin
-	
-	beq $s1, 2, fin
-	
+	beq $s2, 3, imprimirdatos
+
+	beq $s2, 4, fin
 	
 	j loop
 
+
+opcion1m:
+	jal opcion1
+	la $a0, Menu
+	jal imprimir
+	la $a0, IngresoDato
+	jal imprimir
+	li $v0, 5
+	syscall
+	move $s2, $v0
+	j validacion
+	
 
 fin:	
 	la $a0, MensajeFin
@@ -69,7 +86,7 @@ imprimirdatos:
 	jal imprimir
 	li $v0, 5
 	syscall
-	move $s1, $v0
+	move $s2, $v0
 	j validacion
 	
 imprimir: 
