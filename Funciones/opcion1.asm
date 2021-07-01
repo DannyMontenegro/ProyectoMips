@@ -1,7 +1,7 @@
 .data
 	newLine: .asciiz "\n"
-	pedircodigo: .asciiz "Ingrese el codigo correspondiente a la letra mostrada: \n"
-	letraSeleccionada: .asciiz "La letra es: "
+	pedircodigo: .asciiz "Ingrese el codigo correspondiente al caracter mostrado: \n"
+	letraSeleccionada: .asciiz "El caracter es: "
 	mensajeExitoso: .asciiz "Su respuesta es correcta \n"
 	mensajeFallido: .asciiz "Su respues es incorrecta, el codigo correcto es:"
 	bufferLectura: .space 100

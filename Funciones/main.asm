@@ -48,7 +48,7 @@ validacion: sgt $t0, $s2, 4
 	
 loop:   beq $s2, 1, opcion1m
 	
-	beq $s2, 2, fin
+	beq $s2, 2, opcion2m
 	
 	beq $s2, 3, imprimirdatos
 
@@ -67,7 +67,17 @@ opcion1m:
 	syscall
 	move $s2, $v0
 	j validacion
-	
+
+opcion2m:
+	jal opcion2
+	la $a0, Menu
+	jal imprimir
+	la $a0, IngresoDato
+	jal imprimir
+	li $v0, 5
+	syscall
+	move $s2, $v0
+	j validacion
 
 fin:	
 	la $a0, MensajeFin
