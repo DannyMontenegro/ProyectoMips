@@ -4,7 +4,7 @@
 	MensajeError: .asciiz "Ingrese un valor entre 1 y 4 \n"
 	Bienvenida: .asciiz "Bienvenido al entrenamiento morse\n" 
 	Menu: .asciiz "Que acción deseas realizar: \n 1)Practicar de Español a morse \n 2)Practicar de morse a español \n 3)Mostrar diccionario morse \n 4)Salir del entrenamiento \n"
-	
+	bufferLectura: .space 10
 	
 
 
@@ -26,33 +26,48 @@ main:
 	la $a0, Menu
 	jal imprimir
 	
+	j pedirDatos
+	
+	
+validacion: 
+	addi $t1, $t1, -10
+	
+	sgt $t0, $t1, 52
+        slti $t2, $t1, 49
+        or $t0, $t0, $t2
+	beq $t0, $zero, loop
+	la $a0, MensajeError
+	jal imprimir
+
+pedirDatos:
+	li $t0, 0
+	li $t1, 0
+	li $t2, 0
 	la $a0, IngresoDato
 	jal imprimir
-	li $v0, 5
+	la $a0, bufferLectura
+	la $a1, 9
+	li $v0, 8
 	syscall
-	move $s2, $v0
-	
-validacion: sgt $t0, $s2, 4
-            slti $t1, $s2, 1
-            or $t0, $t0, $t1
-	    beq $t0, $zero, loop
-	    la $a0, MensajeError
-	    jal imprimir
-	    la $a0, IngresoDato
-	    jal imprimir
-	    li $v0, 5
-	    syscall
-	    move $s2, $v0
-	    j validacion
-	
-	
-loop:   beq $s2, 1, opcion1m
-	
-	beq $s2, 2, opcion2m
-	
-	beq $s2, 3, imprimirdatos
+	move $s2, $a0
 
-	beq $s2, 4, fin
+sumarAscii:
+	beq $t2, 10, validacion
+	lb $t0, ($s2)
+	add $t1, $t1, $t0
+	addi $s2, $s2, 1
+	addi $t2, $t2, 1
+	j sumarAscii
+	
+	
+loop:   
+	beq $t1, '1', opcion1m
+	
+	beq $t1, '2', opcion2m
+	
+	beq $t1, '3', imprimirdatos
+
+	beq $t1, '4', fin
 	
 	j loop
 
@@ -61,23 +76,13 @@ opcion1m:
 	jal opcion1
 	la $a0, Menu
 	jal imprimir
-	la $a0, IngresoDato
-	jal imprimir
-	li $v0, 5
-	syscall
-	move $s2, $v0
-	j validacion
+	j pedirDatos
 
 opcion2m:
 	jal opcion2
 	la $a0, Menu
 	jal imprimir
-	la $a0, IngresoDato
-	jal imprimir
-	li $v0, 5
-	syscall
-	move $s2, $v0
-	j validacion
+	j pedirDatos
 
 fin:	
 	la $a0, MensajeFin
@@ -92,12 +97,7 @@ imprimirdatos:
 	la $a0, Menu
 	jal imprimir
 	
-	la $a0, IngresoDato
-	jal imprimir
-	li $v0, 5
-	syscall
-	move $s2, $v0
-	j validacion
+	j pedirDatos
 	
 imprimir: 
 	
