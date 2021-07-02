@@ -46,6 +46,8 @@ opcion2:
 	li $v0, 8
 	syscall
 	
+	jal mayusAminus
+	
 	sb $t1, 4($sp)
 	
 	
@@ -83,10 +85,23 @@ imprimir:
 	syscall
 	jr $ra
 
+mayusAminus:
+	lb $t3, ($a0)
+	sgt $t4, $t3, 96
+	slti $t5, $t3, 123
+	and $t4, $t4, $t5
+	beq $t4, 1, restar
+	jr $ra
+	
+restar:
+	addi $t3, $t3, -32
+	sb $t3, ($a0)
+	jr $ra
+
 salir:
 	lw $ra, ($sp)
 	addi $sp, $sp, 8
 	jr $ra 	
 
-		
+	
 	
