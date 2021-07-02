@@ -18,11 +18,11 @@ cargarDatos:
 	move $s0, $v0 #mover FD a $s0
 	
 	
-	la $s1, tamanios #arreglo de tamaño de codigos
+	la $s1, tamanios #arreglo de tamaño de códigos
 	la $s2, letras #arreglo de letras
-	la $s3, memorias #arreglo de memorias
+	la $s3, memorias #arreglo de direcciones de memoria
 	
-	li $t2, 0   #iterador i=0,1,..., Para controlar el indice del arreglo
+	li $t2, 0   #iterador i=0,1,..., Para controlar el índice del arreglo
 	j leer
 	
 abrirArchivo:	
@@ -35,7 +35,7 @@ abrirArchivo:
 		
 	
 leer:	
-	move $a0, $s0
+	move $a0, $s0			#Se lee 1 byte a la vez 
 	li $v0, 14
 	la $a1, bufferLectura
 	li $a2, 1
@@ -44,28 +44,28 @@ leer:
 	beq $v0, 0, salir  #para saber cuando terminar de leer
 
 	sll $t4, $t2, 2
-	add $t6, $t4, $s2 #direccion de memoria del arreglo letras
+	add $t6, $t4, $s2 #dirección de memoria del arreglo de letras
 	
 	
-	lb $t3, ($a1)  #t3 almacena la letra leida
+	lb $t3, ($a1)  #t3 almacena el byte leído
 	beq $t3, 10, leer
 	beq $t3, 13, leer
 	
 	beq $t3, $t1, leerMorse #comparamos si lo leído es una coma
-	sb $t3, ($t6)# almacena la letra leida en el arreglo de letras
+	sb $t3, ($t6) #t3 almacena la letra leída en el arreglo de letras
 	j leer
 	
 	
 
 leerMorse:
-
 	addi $sp, $sp, -8
 	sw $a0, ($sp)
 	add $t5, $t4, $s1 #dirección de arreglo de tamaño
 	
 	lw $a0, ($t5)
 	sw $a0, 4($sp)
-	beq $a0, 4, sumar1
+	beq $a0, 4, sumar1  #Si se van a leer 4 bytes se reserva un buffer de 5 bytes
+	
 terminarReserva:
 	li $v0, 9
 	syscall
@@ -75,7 +75,7 @@ terminarReserva:
 	lw $a0, ($sp)
 	move $a1, $v0
 	li $v0, 14
-	syscall
+	syscall #Se lee el código morse
 	
 	
 	add $t7, $t4, $s3 #dirección de memoria del arreglo de memorias
@@ -83,7 +83,7 @@ terminarReserva:
 	
 	
 
-	addi $t2, $t2, 1
+	addi $t2, $t2, 1 
 	
 	addi $sp, $sp, 8
 	j leer
@@ -91,15 +91,15 @@ terminarReserva:
 	
 salir:	
 	li $v0, 16
-	syscall
+	syscall     #Cerramos el archivo de códigos morse
 	lw $ra, ($sp)
 	addi $sp, $sp, 4
-	move $v0, $s2           #Retornamos arreglo de letras
-	move $v1, $s3           #Retornamos arreglo de direcciones de memoria
+	move $v0, $s2           #Retornamos arreglo de letras en v0
+	move $v1, $s3           #Retornamos arreglo de direcciones de memoria en v1
 	jr $ra
 
 sumar1:
-	addi $a0,$a0, 1
+	addi $a0,$a0, 1		#Se suma un byte más a reservar
 	j terminarReserva
 	
 	

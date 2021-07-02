@@ -9,7 +9,7 @@ buffer: .space 1220
 .globl opcion3
 
 
-
+#Se lee el archivo DiccionarioMorse que tiene formato predeterminado para únicamente ser mostrado por pantalla
 opcion3:
 	addi $sp, $sp, -12
 	sw $ra, ($sp)
@@ -17,7 +17,7 @@ opcion3:
 	sw $s1, 8($sp)
 	
 	jal abrirArchivo
-	move $s1,$v0 #fd
+	move $s1,$v0 #Movemos el FD de v0 a s1
 	jal leerArchivo
 	
 	lw $ra, ($sp)
@@ -44,8 +44,10 @@ leerArchivo:
 	la $a1, buffer
 	li $a2,1220
 	syscall
+	
+	
 	li $v0, 16
-	syscall
+	syscall   #Cerramos el archivo DiccionarioMorse
 	
 	
 	la $v0, buffer #Se retorna el buffer con los datos al main

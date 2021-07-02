@@ -14,24 +14,24 @@
 
 main:
 	jal cargarDatos
-	move $s0, $v0             
-	move $s1, $v1
+	move $s0, $v0   #Movemos el arreglo de letras a s0          
+	move $s1, $v1 	#Movemos el arreglo de direcciones de memoria a s1
 	
 	jal opcion3
-	move $t4, $v0
+	move $t4, $v0	#Movemos el diccionario morse a t4
 	
 	
-	la $a0, Bienvenida
+	la $a0, Bienvenida 	#Se imprime un mensaje de bienvenida
 	jal imprimir
-	la $a0, Menu
+	la $a0, Menu		#Se imprime el menú de opciones
 	jal imprimir
 	
-	j pedirDatos
+	j pedirDatos	#Se pide al usuario ingresar una opción
 	
 	
 validacion: 
-	
-	sgt $t0, $t1, 52
+	#Se valida que el usuario ingrese un número entre 1 y 4
+	sgt $t0, $t1, 52	
         slti $t2, $t1, 49
         or $t0, $t0, $t2
 	beq $t0, $zero, loop
@@ -39,6 +39,7 @@ validacion:
 	jal imprimir
 
 pedirDatos:
+	#pide la opción al usuario
 	li $t0, 0
 	li $t1, 0
 	li $t2, 0
@@ -51,6 +52,7 @@ pedirDatos:
 	move $s2, $a0
 
 sumarAscii:
+#Se lleva la opción del usuario a código ascii y se envía a validar
 	beq $t2, 10, validacion
 	lb $t0, ($s2)
 	beq $t0, 10, validacion
@@ -61,6 +63,7 @@ sumarAscii:
 	
 	
 loop:   
+#Se comprueba la opción que ingreso el usuario y se ejecuta la función correspondiente
 	beq $t1, '1', opcion1m
 	
 	beq $t1, '2', opcion2m
@@ -73,18 +76,21 @@ loop:
 
 
 opcion1m:
+#Se ejecuta la opción 1
 	jal opcion1
 	la $a0, Menu
 	jal imprimir
 	j pedirDatos
 
 opcion2m:
+#Se ejecuta la opción 2
 	jal opcion2
 	la $a0, Menu
 	jal imprimir
 	j pedirDatos
 
-fin:	
+fin:
+#Se ejecuta la opción 4
 	la $a0, MensajeFin
 	jal imprimir
 	li $v0, 10
@@ -92,6 +98,7 @@ fin:
 
 
 imprimirdatos:
+#Se ejecuta la opción 3
 	move $a0, $t4
 	jal imprimir
 	la $a0, Menu
@@ -100,7 +107,7 @@ imprimirdatos:
 	j pedirDatos
 	
 imprimir: 
-	
+#Función para imprimir datos
 	li $v0, 4
 	syscall
 	jr $ra
