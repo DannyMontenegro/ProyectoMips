@@ -30,7 +30,6 @@ main:
 	
 	
 validacion: 
-	addi $t1, $t1, -10
 	
 	sgt $t0, $t1, 52
         slti $t2, $t1, 49
@@ -54,6 +53,7 @@ pedirDatos:
 sumarAscii:
 	beq $t2, 10, validacion
 	lb $t0, ($s2)
+	beq $t0, 10, validacion
 	add $t1, $t1, $t0
 	addi $s2, $s2, 1
 	addi $t2, $t2, 1

@@ -3,7 +3,7 @@
 	pedircodigo: .asciiz "Ingrese el codigo correspondiente al caracter mostrado: \n"
 	letraSeleccionada: .asciiz "El caracter es: "
 	mensajeExitoso: .asciiz "Su respuesta es correcta \n"
-	mensajeFallido: .asciiz "Su respues es incorrecta, el codigo correcto es:"
+	mensajeFallido: .asciiz "Su respuesta es incorrecta, el codigo correcto es:"
 	bufferLectura: .space 100
 	
 	
